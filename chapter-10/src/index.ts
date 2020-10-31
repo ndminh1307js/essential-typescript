@@ -17,8 +17,12 @@ let dataItems: (Product | Person)[] = [
   { id: 'bsmith', name: 'Bob', city: 'London' }
 ];
 
+function isPerson(testObj: any): testObj is Person {
+  return testObj.city !== undefined;
+}
+
 dataItems.forEach(item => {
-  if ('city' in item) {
+  if (isPerson(item)) {
     console.log(`Person: ${item.name} - ${item.city}`);
   } else {
     console.log(`Product: ${item.name} - ${item.price}`);
