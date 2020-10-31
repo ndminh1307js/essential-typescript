@@ -27,37 +27,16 @@ class DataCollection<T extends { name: string }> {
     this.items = initialItems;
   }
 
-  collate<U>(targetData: U[], itemProp: string, targetProp: string): (T & U)[] {
-    let results = [];
-    this.items.forEach(item => {
-      let match = targetData.find(d => d[targetProp] === item[itemProp]);
-      if (match) {
-        results.push({ ...match, ...item });
-      }
-    });
-
-    return results;
+  filter<V extends T>(predicate: (target) => target is V): V[] {
+    return this.items.filter(item => predicate(item)) as V[];
   }
 }
 
-class SearchableCollection<T extends (Person | Employee)> extends DataCollection<T> {
-  constructor(initialItems: T[]) {
-    super(initialItems);
-  }
+let mixedData = new DataCollection<Person | Product>([...people, ...products]);
 
-  find(searchTerm: string): T[] {
-    return this.items.filter(item => {
-      if (item instanceof Employee) {
-        return item.name === searchTerm || item.role === searchTerm
-      } else if (item instanceof Person) {
-        return item.name === searchTerm || item.city === searchTerm
-      }
-    });
-  }
-
-
+function isProduct(target): target is Product {
+  return target instanceof Product;
 }
 
-let employeeData = new SearchableCollection<Employee>(employees);
-let foundEmp = employeeData.find('Actor');
-console.log(foundEmp);
+let filteredProducts = mixedData.filter(isProduct);
+console.log(filteredProducts);
