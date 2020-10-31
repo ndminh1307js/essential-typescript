@@ -1,23 +1,38 @@
 import { Person, Product, City, Employee } from './dataTypes';
 
-type Name = {
+type shapeType = {
   name: string
 };
 
-interface Collection<T extends Name> {
+interface Collection<T extends shapeType> {
   add(...newItems: T[]): void;
   get(name: string): T;
   count: number;
 }
 
-interface SearchableCollection<T extends Name> extends Collection<T> {
-  find(name: string): T | undefined;
-}
+class ArrayCollection<DataType extends shapeType> implements Collection<DataType> {
+  private items: DataType[] = [];
 
-interface ProductCollection extends Collection<Product> {
-  sumPrices(): number;
-}
+  constructor(initialItems: DataType[]) {
+    this.items = initialItems;
+  }
 
-interface PeopleCollection<T extends Person | Employee> extends Collection<T> {
-  getNames(): string[]
+  add(...newItems: DataType[]) {
+    return this.items.concat(newItems);
+  }
+
+  get(name: string): DataType {
+    return this.items.find(item => item.name === name);
+  }
+
+  get count(): number {
+    return this.items.length;
+  }
 }
+let peoples = [
+  new Person('James', 'Tokyo'),
+  new Person('Lee', 'Seoul')
+];
+let peopleCollection: Collection<Person> = new ArrayCollection<Person>(peoples);
+console.log(`Size: ${peopleCollection.count}`);
+
