@@ -6,33 +6,53 @@ type shapeType = {
 
 interface Collection<T extends shapeType> {
   add(...newItems: T[]): void;
-  get(name: string): T;
+  get(searchTerm: string): T;
   count: number;
 }
 
-class ArrayCollection<DataType extends shapeType> implements Collection<DataType> {
-  private items: DataType[] = [];
+abstract class ArrayCollection<DataType extends shapeType> implements Collection<DataType> {
+  protected items: DataType[] = [];
 
   constructor(initialItems: DataType[]) {
     this.items = initialItems;
   }
 
-  add(...newItems: DataType[]) {
-    return this.items.concat(newItems);
+  add(...newItems: DataType[]): void {
+    this.items.push(...newItems);
   }
 
-  get(name: string): DataType {
-    return this.items.find(item => item.name === name);
-  }
+  abstract get(searchTerm: string): DataType;
 
   get count(): number {
     return this.items.length;
   }
 }
-let peoples = [
+
+class ProductCollection extends ArrayCollection<Product> {
+  get(searchTerm: string): Product | undefined {
+    return this.items.find(item => item.name === searchTerm)
+  }
+}
+
+class PersonCollection extends ArrayCollection<Person> {
+  get(searchTerm: string): Person | undefined {
+    return this.items.find(item =>
+      item.name === searchTerm || item.city === searchTerm)
+  }
+}
+
+let people = [
   new Person('James', 'Tokyo'),
   new Person('Lee', 'Seoul')
 ];
-let peopleCollection: Collection<Person> = new ArrayCollection<Person>(peoples);
-console.log(`Size: ${peopleCollection.count}`);
+let peopleCollection: Collection<Person> = new PersonCollection(people);
+peopleCollection.add(new Person('Bill', 'Paris'));
+console.log(peopleCollection);
+
+let productCollection: Collection<Product> = new ProductCollection([
+  new Product('Hat', 12),
+  new Product('Shoe', 15)
+]);
+console.log(productCollection.get('Hat'));
+
 
