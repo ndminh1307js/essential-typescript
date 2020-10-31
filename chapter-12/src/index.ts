@@ -21,7 +21,7 @@ let employees = [
 ];
 
 class DataCollection<T extends { name: string }> {
-  private items: T[] = [];
+  protected items: T[] = [];
 
   constructor(initialItems: T[]) {
     this.items = initialItems;
@@ -40,8 +40,18 @@ class DataCollection<T extends { name: string }> {
   }
 }
 
-let peopleData = new DataCollection<Person>(people);
-let collatedData = peopleData.collate<City>(cities, 'city', 'name');
-collatedData.forEach(c => console.log(`${c.name} ${c.city} ${c.population}`));
-let empData = peopleData.collate<Employee>(employees, 'name', 'name');
-empData.forEach(e => console.log(`${e.name} ${e.city} ${e.role}`));
+class SearchableCollection<T extends { name: string }> extends DataCollection<T> {
+  constructor(initialItems: T[]) {
+    super(initialItems);
+  }
+
+  find(name: string): T | undefined {
+    return this.items.find(item => item.name === name);
+  }
+
+
+}
+
+let peopleData = new SearchableCollection<Person>(people);
+let foundPerson = peopleData.find('James McAvoy');
+console.log(foundPerson);
