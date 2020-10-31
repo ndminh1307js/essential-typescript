@@ -10,16 +10,17 @@ type Person = {
   city: string
 };
 
-type UnionType = {
-  id: number | string,
-  name: string
-}
-
-let dataItems: UnionType[] = [
+let dataItems: (Product | Person)[] = [
   { id: 1, name: 'Hat', price: 100 },
   { id: 2, name: 'Gloves', price: 75 },
   { id: 3, name: 'Umbrella', price: 30 },
   { id: 'bsmith', name: 'Bob', city: 'London' }
 ];
 
-dataItems.forEach(item => console.log(`ID: ${item.id}, Name: ${item.name}`));
+dataItems.forEach(item => {
+  if ('city' in item) {
+    console.log(`Person: ${item.name} - ${item.city}`);
+  } else {
+    console.log(`Product: ${item.name} - ${item.price}`);
+  }
+});
