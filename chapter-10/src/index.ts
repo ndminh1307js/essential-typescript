@@ -1,30 +1,25 @@
-type Product = {
-  id: number,
-  name: string,
-  price?: number
-};
-
 type Person = {
   id: string,
   name: string,
   city: string
 };
 
-let dataItems: (Product | Person)[] = [
-  { id: 1, name: 'Hat', price: 100 },
-  { id: 2, name: 'Gloves', price: 75 },
-  { id: 3, name: 'Umbrella', price: 30 },
-  { id: 'bsmith', name: 'Bob', city: 'London' }
-];
+type Employee = {
+  company: string,
+  dept: string
+};
 
-function isPerson(testObj: any): testObj is Person {
-  return testObj.city !== undefined;
-}
+let bob = {
+  id: 'bsmith',
+  name: 'Bob',
+  city: 'London',
+  company: 'Acme Co',
+  dept: 'Sales'
+};
+
+let dataItems: (Person & Employee)[] = [bob];
 
 dataItems.forEach(item => {
-  if (isPerson(item)) {
-    console.log(`Person: ${item.name} - ${item.city}`);
-  } else {
-    console.log(`Product: ${item.name} - ${item.price}`);
-  }
+  console.log(`Person: ${item.id}, ${item.name}, ${item.city}`);
+  console.log(`Employee: ${item.company}, ${item.dept}`);
 });
