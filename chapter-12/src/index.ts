@@ -30,6 +30,10 @@ class DataCollection<T extends { name: string }> {
   filter<V extends T>(predicate: (target) => target is V): V[] {
     return this.items.filter(item => predicate(item)) as V[];
   }
+
+  static reverse<ArrayType>(items: ArrayType[]): ArrayType[] {
+    return items.reverse();
+  }
 }
 
 let mixedData = new DataCollection<Person | Product>([...people, ...products]);
@@ -40,3 +44,6 @@ function isProduct(target): target is Product {
 
 let filteredProducts = mixedData.filter(isProduct);
 console.log(filteredProducts);
+
+let reversedCities = DataCollection.reverse<City>(cities);
+console.log(reversedCities);
