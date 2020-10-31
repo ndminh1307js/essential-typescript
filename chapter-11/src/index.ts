@@ -4,38 +4,20 @@ type Person = {
   city: string
 };
 
-type Employee = {
-  id: string,
-  name: string,
-  company: string,
-  dept: string,
-  writeDept: () => void
+class Employee {
+  constructor(
+    public readonly id: string,
+    public name: string,
+    private dept: string,
+    public city: string
+  ) {
+    // no statements required
+  }
+
+  writeDept() {
+    console.log(`${this.name} works in the ${this.dept} deparment`);
+  }
 }
 
-let Employee = function (id: string, name: string, company: string, dept: string) {
-  this.id = id;
-  this.name = name;
-  this.company = company;
-  this.dept = dept;
-};
-
-Employee.prototype.writeDept = function () {
-  console.log(`${this.name} works in ${this.dept}`);
-};
-
 let salesEmployee = new Employee('shinichikudo', 'Conan Edogawa', 'Detective Conan', 'detective');
-
-let dataItems: (Person | Employee)[] = [
-  { id: 'megure', name: 'Megure', city: 'Tokyo' },
-  { id: 'heiji', name: 'Heiji Hattori', city: 'Osaka' },
-  { id: 'kazuha', name: 'Kazuha Toyama', city: 'Osaka' },
-  salesEmployee
-];
-
-dataItems.forEach(item => {
-  if ('dept' in item) {
-    item.writeDept();
-  } else {
-    console.log(`${item.id} ${item.name} ${item.city}`);
-  }
-})
+salesEmployee.writeDept();
