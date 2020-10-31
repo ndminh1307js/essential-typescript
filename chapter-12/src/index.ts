@@ -10,32 +10,36 @@ let products = [
   new Product('Fuhlen G90', 15)
 ];
 
-type dataType = Person | Product;
+// type dataType = Person | Product;
 
-class DataCollection {
-  private items: dataType[] = [];
+class DataCollection<T> {
+  private items: T[] = [];
 
-  constructor(initialItems: dataType[]) {
+  constructor(initialItems: T[]) {
     this.items = initialItems;
   }
 
-  add(newItem: dataType) {
+  add(newItem: T) {
     return this.items.push(newItem);
   }
 
-  getNames(): string[] {
-    return this.items.map(item => item.name);
-  }
+  // getNames(): string[] {
+  //   return this.items.map(item => item.name);
+  // }
 
   getItem(index: number) {
     return this.items[index];
   }
 }
 
-let peopleData = new DataCollection(people);
+let peopleData = new DataCollection<Person>(people);
 
-console.log(`Names: ${peopleData.getNames().join(', ')}`);
+// console.log(`Names: ${peopleData.getNames().join(', ')}`);
 let firstPerson = peopleData.getItem(0);
-if (firstPerson instanceof Person) {
-  console.log(`First person: ${firstPerson.name}, ${firstPerson.city}`);
-}
+// if (firstPerson instanceof Person) {
+console.log(`First person: ${firstPerson.name}, ${firstPerson.city}`);
+// }
+
+let productData = new DataCollection<Product>(products);
+let firstProduct = productData.getItem(0);
+console.log(`First product: ${firstProduct.name}, ${firstProduct.price}`);
