@@ -40,19 +40,24 @@ class DataCollection<T extends { name: string }> {
   }
 }
 
-class SearchableCollection extends DataCollection<Employee> {
-  constructor(initialItems: Employee[]) {
+class SearchableCollection<T extends (Person | Employee)> extends DataCollection<T> {
+  constructor(initialItems: T[]) {
     super(initialItems);
   }
 
-  find(searchTerm: string): Employee[] {
-    return this.items.filter(item =>
-      item.name === searchTerm || item.role === searchTerm);
+  find(searchTerm: string): T[] {
+    return this.items.filter(item => {
+      if (item instanceof Employee) {
+        return item.name === searchTerm || item.role === searchTerm
+      } else if (item instanceof Person) {
+        return item.name === searchTerm || item.city === searchTerm
+      }
+    });
   }
 
 
 }
 
-let employeeData = new SearchableCollection(employees);
-let foundEmp = employeeData.find('Ryan Gosling');
+let employeeData = new SearchableCollection<Employee>(employees);
+let foundEmp = employeeData.find('Actor');
 console.log(foundEmp);
