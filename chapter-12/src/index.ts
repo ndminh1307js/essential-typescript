@@ -1,4 +1,4 @@
-import { Person, Product } from './dataTypes';
+import { Person, Product, City } from './dataTypes';
 
 let people = [
   new Person('James McAvoy', 'Manchester'),
@@ -10,7 +10,12 @@ let products = [
   new Product('Fuhlen G90', 15)
 ];
 
-class DataCollection<T extends (Person | Product)> {
+let cities = [
+  new City('New York', 12),
+  new City('Tokyo', 15)
+];
+
+class DataCollection<T extends { name: string }> {
   private items: T[] = [];
 
   constructor(initialItems: T[]) {
@@ -39,3 +44,6 @@ let productData = new DataCollection<Product>(products);
 let firstProduct = productData.getItem(0);
 console.log(`First product: ${firstProduct.name}, ${firstProduct.price}`);
 console.log(`Product names: ${productData.getNames().join(', ')}`);
+
+let cityData = new DataCollection<City>(cities);
+console.log(`City names: ${cityData.getNames().join(', ')}`);
