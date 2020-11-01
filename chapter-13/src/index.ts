@@ -2,14 +2,30 @@ import { Person, Product, City, Employee } from './dataTypes';
 
 type resultType<T extends boolean> = T extends true ? string : number;
 
-type reference = 'London' | 'Bob' | 'Kayak';
+class Collection<T> {
+	private items: T[];
 
-type nestedType<T extends reference> = T extends 'London'
-	? City
-	: T extends 'Bob'
-	? Person
-	: Product;
+	constructor(...initialItems: T[]) {
+		this.items = initialItems || [];
+	}
 
-let first: nestedType<'London'> = new City('London', 8136000);
-let second: nestedType<'Bob'> = new Person('Bob', 'London');
-let third: nestedType<'Kayak'> = new Product('Kayak', 125);
+	total<P extends keyof T, U extends boolean>(
+		propName: P,
+		format: U
+	): resultType<U> {
+		let totalValue = this.items.reduce(
+			(total, item) => (total += Number(item[propName])),
+			0
+		);
+
+		return format ? `$${totalValue.toFixed(2)}` : (totalValue as any);
+	}
+}
+
+let data = new Collection<Product>(
+	new Product('Hat', 15),
+	new Product('Shoe', 25),
+	new Product('Kayak', 125)
+);
+
+console.log(data.total('price', false));
