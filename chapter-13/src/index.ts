@@ -1,16 +1,15 @@
 import { Person, Product, City, Employee } from './dataTypes';
 
-type CustomMapped<K extends keyof any, T> = {
-	[P in K]: T;
-};
+type resultType<T extends boolean> = T extends true ? string : number;
 
-let p1: CustomMapped<'name' | 'city', string> = {
-	name: 'Millie',
-	city: 'London',
-};
-let p2: Record<'name' | 'city', string> = {
-	name: 'James',
-	city: 'Liverpool',
-};
-console.log(`Custom mapped type: ${p1.name}, ${p1.city}`);
-console.log(`Built-in mapped type: ${p2.name}, ${p2.city}`);
+type reference = 'London' | 'Bob' | 'Kayak';
+
+type nestedType<T extends reference> = T extends 'London'
+	? City
+	: T extends 'Bob'
+	? Person
+	: Product;
+
+let first: nestedType<'London'> = new City('London', 8136000);
+let second: nestedType<'Bob'> = new Person('Bob', 'London');
+let third: nestedType<'Kayak'> = new Product('Kayak', 125);
