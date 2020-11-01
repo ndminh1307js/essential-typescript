@@ -2,17 +2,35 @@ import { Person, Product, City, Employee } from './dataTypes';
 
 let products = [new Product('Running Shoe', 25), new Product('Hat', 12)];
 
-function getValue<T, K extends keyof T>(item: T, keyname: K): T[K] {
-	return item[keyname];
+class Collection<T, K extends keyof T> implements Iterable<T> {
+	private items: Map<T[K], T>;
+
+	constructor(initialItems: T[] = [], private propertyName: K) {
+		this.items = new Map<T[K], T>();
+		this.add(...initialItems);
+	}
+
+	add(...newItems: T[]): void {
+		newItems.forEach((item) => this.items.set(item[this.propertyName], item));
+	}
+
+	get(key: T[K]): T {
+		return this.items.get(key);
+	}
+
+	get count(): number {
+		return this.items.size;
+	}
+
+	[Symbol.iterator](): Iterator<T> {
+		return this.items.values();
+	}
 }
 
-// type priceType = Product['price'];
-// type allTypes = Product[keyof Product];
+let productCollection: Collection<Product, 'name'> = new Collection(
+	products,
+	'name'
+);
 
-let p = new Product('Running Shoe', 100);
-console.log(getValue<Product, 'name'>(p, 'name'));
-console.log(getValue(p, 'price'));
-
-let e = new Employee('Bob', 'Director');
-console.log(getValue(e, 'name'));
-console.log(getValue(e, 'role'));
+let itemByKey = productCollection.get('Hat');
+console.log(itemByKey);
