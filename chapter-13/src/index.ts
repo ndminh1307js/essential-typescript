@@ -1,36 +1,46 @@
 import { Person, Product, City, Employee } from './dataTypes';
 
-let products = [new Product('Running Shoe', 25), new Product('Hat', 12)];
+type Mapped<T> = {
+	[P in keyof T]: T[P];
+};
 
-class Collection<T, K extends keyof T> implements Iterable<T> {
-	private items: Map<T[K], T>;
+let p: Mapped<Product> = { name: 'Kayak', price: 275 };
+console.log(p);
 
-	constructor(initialItems: T[] = [], private propertyName: K) {
-		this.items = new Map<T[K], T>();
-		this.add(...initialItems);
-	}
+let e: Mapped<Employee> = { name: 'Murray', role: 'Developer' };
+console.log(e);
 
-	add(...newItems: T[]): void {
-		newItems.forEach((item) => this.items.set(item[this.propertyName], item));
-	}
+// let products = [new Product('Running Shoe', 25), new Product('Hat', 12)];
 
-	get(key: T[K]): T {
-		return this.items.get(key);
-	}
+// class Collection<T, K extends keyof T> implements Iterable<T> {
+// 	private items: Map<T[K], T>;
 
-	get count(): number {
-		return this.items.size;
-	}
+// 	constructor(initialItems: T[] = [], private propertyName: K) {
+// 		this.items = new Map<T[K], T>();
+// 		this.add(...initialItems);
+// 	}
 
-	[Symbol.iterator](): Iterator<T> {
-		return this.items.values();
-	}
-}
+// 	add(...newItems: T[]): void {
+// 		newItems.forEach((item) => this.items.set(item[this.propertyName], item));
+// 	}
 
-let productCollection: Collection<Product, 'name'> = new Collection(
-	products,
-	'name'
-);
+// 	get(key: T[K]): T {
+// 		return this.items.get(key);
+// 	}
 
-let itemByKey = productCollection.get('Hat');
-console.log(itemByKey);
+// 	get count(): number {
+// 		return this.items.size;
+// 	}
+
+// 	[Symbol.iterator](): Iterator<T> {
+// 		return this.items.values();
+// 	}
+// }
+
+// let productCollection: Collection<Product, 'name'> = new Collection(
+// 	products,
+// 	'name'
+// );
+
+// let itemByKey = productCollection.get('Hat');
+// console.log(itemByKey);
