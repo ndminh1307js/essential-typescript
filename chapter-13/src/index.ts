@@ -1,14 +1,26 @@
 import { Person, Product, City, Employee } from './dataTypes';
 
-type targetKeys<T> = T extends (infer U)[] ? keyof U : keyof T;
+type Result<T> = T extends (...args: any) => infer R ? R : never;
 
-function getValue<T, P extends targetKeys<T>>(data: T, propName: P): T[P] {
-	if (Array.isArray(data)) {
-		return data[0][propName];
-	}
-
-	return data[propName];
+function processArray<T, Func extends (T) => any>(
+	data: T[],
+	func: Func
+): Result<Func>[] {
+	return data.map((item) => func(item));
 }
 
+let selectName = (p: Product) => p.name;
+
 let products = [new Product('Kayak', 275), new Product('Lifejacket', 48.95)];
-console.log(`Array value: ${getValue(products, 'price')}`);
+let names: string[] = processArray(products, selectName);
+console.log(names);
+
+function makeObject<T extends new (...args: any) => any>(
+	constructor: T,
+	...args: ConstructorParameters<T>
+): InstanceType<T> {
+	return new constructor(...(args as any));
+}
+
+let prod: Product = makeObject(Product, 'Kayak', 275);
+console.log(prod);
