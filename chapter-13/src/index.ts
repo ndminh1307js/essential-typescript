@@ -1,15 +1,16 @@
 import { Person, Product, City, Employee } from './dataTypes';
 
-type CustomMapped<T, K extends keyof T> = {
-	readonly [P in K]?: T[P];
+type CustomMapped<K extends keyof any, T> = {
+	[P in K]: T;
 };
 
-type BuiltInMapped<T, K extends keyof T> = Readonly<Partial<Pick<T, K>>>;
-
-let p1: CustomMapped<Product, 'name'> = { name: 'Kayak' };
-let p2: BuiltInMapped<Product, 'name' | 'price'> = {
-	name: 'Lifejacket',
-	price: 48.95,
+let p1: CustomMapped<'name' | 'city', string> = {
+	name: 'Millie',
+	city: 'London',
 };
-console.log(`Custom mapped type: ${p1.name}`);
-console.log(`Built-in mapped type: ${p2.name}, ${p2.price}`);
+let p2: Record<'name' | 'city', string> = {
+	name: 'James',
+	city: 'Liverpool',
+};
+console.log(`Custom mapped type: ${p1.name}, ${p1.city}`);
+console.log(`Built-in mapped type: ${p2.name}, ${p2.city}`);
